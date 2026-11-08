@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<meta name="theme-color" content="#080d1b">
+
+<title>Hào Toán RPG V8.0</title>
+
+<style>
+
+:root{
+
+  --bg:#080d1b;
+
+  --panel:#141f36;
+
+  --panel2:#101a2e;
+
+  --line:#2a3c5c;
+
+  --text:#edf4ff;
+
+  --muted:#94a8c8;
+
+  --gold:#ffd166;
+
+  --blue:#50b8ff;
+
+  --green:#3ee69b;
+
+  --red:#ff5470;
+
+  --purple:#b68cff;
+
+  --accent:#50b8ff;
+
+}
+
+*{box-sizing:border-box}
+
+body{
+
+  margin:0;
+
+  background:
+
+    radial-gradient(circle at 20% 0%,#172d50 0,transparent 35%),
+
+    radial-gradient(circle at 90% 30%,#241b48 0,transparent 35%),
+
+    var(--bg);
+
+  color:var(--text);
+
+  font-family:system-ui,-apple-system,Arial,sans-serif;
+
+  min-height:100vh;
+
+}
+
+button,input{font:inherit}
+
+button{cursor:pointer}
+
+button:disabled{opacity:.45;cursor:not-allowed}
+
+.hidden{display:none!important}
+
+.app{max-width:1050px;margin:auto;padding:14px}
+
+.topbar{
+
+  display:flex;justify-content:space-between;align-items:center;
+
+  gap:10px;margin-bottom:14px;flex-wrap:wrap;
+
+}
+
+.logo{font-weight:1000;font-size:22px;letter-spacing:1px}
+
+.logo span{color:var(--gold)}
+
+.pill{
+
+  background:#182945;border:1px solid var(--line);
+
+  border-radius:30px;padding:8px 13px;font-size:13px;
+
+}
+
+.panel{
+
+  background:linear-gradient(145deg,#172540,#101a2e);
+
+  border:1px solid var(--line);
+
+  border-radius:18px;padding:17px;margin-bottom:14px;
+
+  box-shadow:0 12px 35px #0004;
+
+}
+
+h1,h2,h3,p{margin-top:0}
+
+h1{font-size:25px}
+
+h2{font-size:19px}
+
+.muted{color:var(--muted)}
+
+.small{font-size:12px}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+
+.btn{
+
+  border:0;border-radius:12px;padding:12px 15px;
+
+  background:linear-gradient(135deg,#258de0,#6255d9);
+
+  color:white;font-weight:800;box-shadow:0 5px 15px #0003;
+
+}
+
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+
+.btn.secondary{background:#263957;border:1px solid #3a5277}
+
+.btn.gold{background:linear-gradient(135deg,#b97922,#edbd52);color:#201400}
+
+.btn.green{background:linear-gradient(135deg,#119b69,#36d99a);color:#031d13}
+
+.btn.red{background:linear-gradient(135deg,#a92b49,#ff5470)}
+
+.btn.purple{background:linear-gradient(135deg,#7138b8,#b68cff)}
+
+.btn.block{width:100%;margin-top:8px}
+
+input{
+
+  width:100%;padding:12px;border-radius:10px;
+
+  background:#091326;border:1px solid var(--line);
+
+  color:white;margin:6px 0 12px;outline:none;
+
+}
+
+input:focus{border-color:var(--blue)}
+
+.stat{
+
+  background:#0b172b;border:1px solid #253b5e;
+
+  border-radius:13px;padding:12px;text-align:center;
+
+}
+
+.stat b{display:block;font-size:22px;color:var(--gold)}
+
+.stat span{font-size:12px;color:var(--muted)}
+
+.progress{
+
+  height:12px;background:#07101f;border-radius:20px;
+
+  overflow:hidden;border:1px solid #263b5b;
+
+}
+
+.progress>div{
+
+  height:100%;width:0%;
+
+  background:linear-gradient(90deg,#3e9fff,#9c79ff,#ffd166);
+
+  transition:width .3s;
+
+}
+
+.avatar{font-size:48px}
+
+.hero{text-align:center;padding:25px 15px}
+
+.hero .avatar{font-size:65px}
+
+.mode{
+
+  text-align:left;background:#0d1a30;border:1px solid var(--line);
+
+  border-radius:13px;padding:14px;color:white;
+
+}
+
+.mode b{display:block;font-size:17px;margin-bottom:5px}
+
+.mode:active{transform:scale(.98)}
+
+.question{
+
+  text-align:center;font-size:clamp(32px,8vw,58px);
+
+  font-weight:1000;letter-spacing:2px;margin:28px 0;
+
+}
+
+.timer{
+
+  font-size:28px;font-weight:1000;color:var(--gold);
+
+  text-align:center;
+
+}
+
+.answer-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+
+.answer{
+
+  min-height:68px;font-size:22px;font-weight:900;
+
+  border-radius:14px;border:1px solid #3a5277;
+
+  background:#1b3152;color:white;
+
+}
+
+.answer:active{transform:scale(.97)}
+
+.feedback{
+
+  min-height:50px;text-align:center;font-size:25px;
+
+  font-weight:1000;margin:15px 0;
+
+}
+
+.correctText{color:var(--green);text-shadow:0 0 20px #3ee69b}
+
+.wrongText{color:var(--red);text-shadow:0 0 20px #ff5470}
+
+.boomText{color:var(--gold);text-shadow:0 0 30px #ff8c00}
+
+.shake{animation:shake .4s}
+
+@keyframes shake{
+
+  0%,100%{transform:translateX(0)}
+
+  20%,60%{transform:translateX(-7px)}
+
+  40%,80%{transform:translateX(7px)}
+
+}
+
+.pop{animation:pop .4s}
+
+@keyframes pop{
+
+  0%{transform:scale(.6);opacity:0}
+
+  70%{transform:scale(1.15)}
+
+  100%{transform:scale(1);opacity:1}
+
+}
+
+.boss{
+
+  border:1px solid #794b83;
+
+  background:linear-gradient(135deg,#351d49,#17233e);
+
+  padding:14px;border-radius:15px;margin:12px 0;
+
+}
+
+.boss-icon{font-size:35px}
+
+.tabs{display:flex;gap:7px;overflow-x:auto;margin-bottom:12px}
+
+.tab{
+
+  white-space:nowrap;border:1px solid var(--line);
+
+  background:#101c32;color:white;padding:9px 13px;border-radius:10px;
+
+}
+
+.tab.active{background:#285b91;border-color:#56baff}
+
+.item{
+
+  background:#0b172b;border:1px solid var(--line);
+
+  border-radius:12px;padding:12px;margin:8px 0;
+
+}
+
+.item h3{margin-bottom:5px}
+
+.badge{
+
+  display:inline-block;padding:5px 9px;border-radius:20px;
+
+  background:#263b5c;color:#dcecff;font-size:12px;margin:3px;
+
+}
+
+.badge.gold{background:#63491b;color:#ffe09a}
+
+.badge.green{background:#14543d;color:#8fffd0}
+
+.badge.lock{opacity:.4}
+
+.list{display:flex;justify-content:space-between;gap:10px;align-items:center}
+
+.modal{
+
+  position:fixed;inset:0;background:#000b;z-index:20;
+
+  display:flex;align-items:center;justify-content:center;padding:15px;
+
+}
+
+.modalbox{
+
+  max-width:440px;width:100%;background:#14233d;
+
+  border:1px solid #46618b;border-radius:18px;padding:20px;
+
+}
+
+.toast{
+
+  position:fixed;top:15px;left:50%;transform:translateX(-50%);
+
+  background:#193454;border:1px solid #56baff;
+
+  padding:12px 18px;border-radius:30px;z-index:30;
+
+  box-shadow:0 8px 30px #0008;font-weight:800;
+
+}
+
+.footer{text-align:center;color:#7186a8;font-size:12px;padding:20px}
+
+@media(max-width:600px){
+
+  .app{padding:10px}
+
+  .grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+
+  .panel{padding:13px}
+
+  .logo{font-size:18px}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="topbar">
+
+  <div class="logo">⚔️ HÀO TOÁN <span>RPG V8.0</span></div>
+
+  <div class="pill" id="topLevel">CẤP 1</div>
+
+  <div class="pill" id="topCoins">🪙 0</div>
+
+</header>
+
+<section id="authScreen" class="panel hero">
+
+  <div class="avatar">🧙</div>
+
+  <h1>HÀO TOÁN RPG</h1>
+
+  <p class="muted">Trở thành huyền thoại toán học!</p>
+
+  <div style="max-width:360px;margin:auto;text-align:left">
+
+    <label>Tên tài khoản</label>
+
+    <input id="username" maxlength="20" placeholder="Nhập tên tài khoản">
+
+    <label>Mật khẩu</label>
+
+    <input id="password" type="password" maxlength="40" placeholder="Nhập mật khẩu">
+
+    <button class="btn block" onclick="login()">Đăng nhập</button>
+
+    <button class="btn secondary block" onclick="register()">Tạo tài khoản</button>
+
+    <button class="btn gold block" onclick="guestLogin()">Chơi khách</button>
+
+  </div>
+
+</section>
+
+<section id="homeScreen" class="hidden">
+
+  <div class="panel hero">
+
+    <div class="avatar" id="homeAvatar">🧙</div>
+
+    <h1 id="homeName">Nhà thám hiểm</h1>
+
+    <div class="badge gold" id="homeTitle">Tân Binh</div>
+
+    <p id="homeLevel">Cấp 1</p>
+
+    <div class="progress"><div id="homeXPBar"></div></div>
+
+    <p class="small muted" id="homeXPText">0 / 100 XP</p>
+
+  </div>
+
+  <div class="grid3">
+
+    <div class="stat"><b id="homeCoins">0</b><span>Xu</span></div>
+
+    <div class="stat"><b id="homeGames">0</b><span>Trận đấu</span></div>
+
+    <div class="stat"><b id="homeRight">0</b><span>Câu đúng</span></div>
+
+    <div class="stat"><b id="homeStreak">0</b><span>Chuỗi đúng</span></div>
+
+    <div class="stat"><b id="homeBoss">0</b><span>Boss hạ</span></div>
+
+    <div class="stat"><b id="homeChest">0</b><span>Rương mở</span></div>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>⚔️ Chọn chế độ chiến đấu</h2>
+
+    <div class="grid">
+
+      <button class="mode" onclick="startGame('easy')"><b>🟢 DỄ</b><span class="muted small">4 giây · 1 điểm · Phù hợp khởi đầu</span></button>
+
+      <button class="mode" onclick="startGame('medium')"><b>🔵 VỪA</b><span class="muted small">3 giây · 2 điểm · Thử thách</span></button>
+
+      <button class="mode" onclick="startGame('hard')"><b>🔴 KHÓ</b><span class="muted small">2 giây · 5 điểm · Tốc độ cao</span></button>
+
+      <button class="mode" onclick="startGame('survival')"><b>💀 SINH TỒN</b><span class="muted small">Không giới hạn lượt · Càng chơi càng khó</span></button>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>📜 Nhiệm vụ hằng ngày</h2>
+
+    <p id="dailyText">Trả lời đúng 20 câu để nhận thưởng.</p>
+
+    <div class="progress"><div id="dailyBar"></div></div>
+
+    <button class="btn gold block" id="dailyClaim" onclick="claimDaily()">Nhận thưởng ngày</button>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>🧭 Trung tâm RPG</h2>
+
+    <div class="grid">
+
+      <button class="btn" onclick="openRPG('profile')">👤 Nhân vật</button>
+
+      <button class="btn purple" onclick="openRPG('shop')">🛒 Cửa hàng</button>
+
+      <button class="btn gold" onclick="openRPG('chest')">🎁 Rương báu</button>
+
+      <button class="btn red" onclick="openRPG('boss')">🐉 Boss</button>
+
+      <button class="btn secondary" onclick="openRPG('achievements')">🏆 Thành tích</button>
+
+      <button class="btn secondary" onclick="openRPG('leaderboard')">📊 Xếp hạng</button>
+
+      <button class="btn secondary" onclick="openRPG('stats')">📈 Thống kê</button>
+
+      <button class="btn secondary" onclick="openRPG('titles')">👑 Danh hiệu</button>
+
+    </div>
+
+  </div>
+
+  <div class="panel">
+
+    <h2>⚙️ Tài khoản</h2>
+
+    <button class="btn secondary" onclick="logout()">Đăng xuất</button>
+
+    <button class="btn red" onclick="resetData()">Đặt lại tiến trình</button>
+
+    <button class="btn purple" onclick="adminLogin()">ADMIN</button>
+
+  </div>
+
+</section>
+
+<section id="gameScreen" class="hidden">
+
+  <div class="grid3">
+
+    <div class="stat"><b id="gameScore">0</b><span>Điểm</span></div>
+
+    <div class="stat"><b id="gameRight">0</b><span>Đúng</span></div>
+
+    <div class="stat"><b id="gameStreak">0</b><span>Chuỗi</span></div>
+
+  </div>
+
+  <div class="panel">
+
+    <div class="list">
+
+      <span class="badge" id="gameMode">DỄ</span>
+
+      <span class="timer" id="timer">4.0</span>
+
+      <span class="badge" id="questionLevel">Vòng 1</span>
+
+    </div>
+
+    <div class="boss" id="bossPanel">
+
+      <div class="list">
+
+        <div><span class="boss-icon" id="bossIcon">🟢</span> <b id="bossName">Slime Toán</b></div>
+
+        <b id="bossHPText">10 / 10 HP</b>
+
+      </div>
+
+      <div class="progress"><div id="bossHPBar"></div></div>
+
+    </div>
+
+    <div class="question" id="question">2 + 2 = ?</div>
+
+    <div class="answer-grid" id="answerGrid"></div>
+
+    <div class="feedback" id="feedback"></div>
+
+    <p class="muted small" style="text-align:center">Chọn đáp án đúng trước khi hết giờ!</p>
+
+    <button class="btn secondary block" onclick="endGame('Bạn đã rút lui khỏi trận đấu.')">Rút lui</button>
+
+  </div>
+
+</section>
+
+<section id="overScreen" class="hidden">
+
+  <div class="panel hero">
+
+    <div class="avatar">🏁</div>
+
+    <h1 id="overTitle">KẾT THÚC TRẬN ĐẤU</h1>
+
+    <p id="overMessage" class="muted"></p>
+
+    <div class="grid3">
+
+      <div class="stat"><b id="overScore">0</b><span>Điểm</span></div>
+
+      <div class="stat"><b id="overRight">0</b><span>Đúng</span></div>
+
+      <div class="stat"><b id="overWrong">0</b><span>Sai</span></div>
+
+    </div>
+
+    <p id="overReward" class="badge gold"></p>
+
+    <button class="btn block" onclick="showScreen('home');renderHome()">Về căn cứ</button>
+
+    <button class="btn gold block" onclick="startGame(lastMode)">Chơi lại</button>
+
+  </div>
+
+</section>
+
+<section id="rpgScreen" class="hidden">
+
+  <div class="panel">
+
+    <div class="list">
+
+      <h1>🏰 Trung tâm RPG</h1>
+
+      <button class="btn secondary" onclick="showScreen('home');renderHome()">← Trở về</button>
+
+    </div>
+
+    <div class="tabs">
+
+      <button class="tab active" data-tab="profile" onclick="openRPG('profile')">Nhân vật</button>
+
+      <button class="tab" data-tab="shop" onclick="openRPG('shop')">Cửa hàng</button>
+
+      <button class="tab" data-tab="chest" onclick="openRPG('chest')">Rương</button>
+
+      <button class="tab" data-tab="boss" onclick="openRPG('boss')">Boss</button>
+
+      <button class="tab" data-tab="achievements" onclick="openRPG('achievements')">Thành tích</button>
+
+      <button class="tab" data-tab="titles" onclick="openRPG('titles')">Danh hiệu</button>
+
+      <button class="tab" data-tab="stats" onclick="openRPG('stats')">Thống kê</button>
+
+      <button class="tab" data-tab="leaderboard" onclick="openRPG('leaderboard')">Xếp hạng</button>
+
+      <button class="tab" data-tab="admin" onclick="openRPG('admin')">Admin</button>
+
+    </div>
+
+    <div id="rpgContent"></div>
+
+  </div>
+
+</section>
+
+<div id="modal" class="modal hidden">
+
+  <div class="modalbox">
+
+    <h2 id="modalTitle">Thông báo</h2>
+
+    <p id="modalText"></p>
+
+    <button class="btn block" onclick="closeModal()">Đóng</button>
+
+  </div>
+
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<div class="footer">HÀO TOÁN RPG V8.0 · ULTIMATE EDITION</div>
+
+</div>
+
+<script>
+
+'use strict';
+
+/* =========================
+
+   DỮ LIỆU VÀ TÀI KHOẢN
+
+========================= */
+
+const ACCOUNT_KEY='hao_toan_rpg_v7_accounts';
+
+const DATA_PREFIX='hao_toan_rpg_v7_data_';
+
+const GUEST_DATA_KEY='hao_toan_rpg_v7_guest_data';
+
+const SESSION_KEY='hao_toan_rpg_v73_session';
+
+const ADMIN_PASSWORD='10012016';
+
+const $=id=>document.getElementById(id);
+
+const today=()=>new Date().toLocaleDateString('en-CA');
+
+const safeNumber=n=>Math.max(0,Number(n)||0);
+
+let accounts=read(ACCOUNT_KEY,[]);
+
+let currentUser=null;
+
+let data=null;
+
+let guest=false;
+
+let currentTab='profile';
+
+let game=null;
+
+let timerId=null;
+
+let timerToken=0;
+
+let lastMode='easy';
+
+let toastTimer=null;
+
+function read(key,fallback){
+
+  try{
+
+    const value=localStorage.getItem(key);
+
+    return value?JSON.parse(value):fallback;
+
+  }catch(e){return fallback}
+
+}
+
+function write(key,value){
+
+  try{localStorage.setItem(key,JSON.stringify(value))}
+
+  catch(e){notify('Không thể lưu dữ liệu trên thiết bị này.')}
+
+}
+
+function defaults(){
+
+  return {
+
+    records:{easy:0,medium:0,hard:0,survival:0},
+
+    adminBestHardScore:0,games:0,right:0,wrong:0,
+
+    xp:0,coins:0,ownedThemes:['neon'],theme:'neon',
+
+    achievements:[],dailyDate:today(),dailyCorrect:0,
+
+    dailyClaimed:false,dailyStreak:0,dailyLastCompleted:'',
+
+    adminUnlocked:false,adminRewardClaimed:false,
+
+    bossesDefeated:0,chestsOpened:0,
+
+    ownedAvatars:['🧙'],avatar:'🧙',
+
+    ownedTitles:['Tân Binh'],title:'Tân Binh',
+
+    bestStreak:0,totalScore:0
+
+  };
+
+}
+
+function mergeData(old){
+
+  const d={...defaults(),...(old||{})};
+
+  d.records={...defaults().records,...(d.records||{})};
+
+  d.achievements=Array.isArray(d.achievements)?d.achievements:[];
+
+  d.ownedThemes=Array.isArray(d.ownedThemes)?d.ownedThemes:['neon'];
+
+  d.ownedAvatars=Array.isArray(d.ownedAvatars)?d.ownedAvatars:['🧙'];
+
+  d.ownedTitles=Array.isArray(d.ownedTitles)?d.ownedTitles:['Tân Binh'];
+
+  if(d.title==='Tân binh')d.title='Tân Binh';
+
+  return d;
+
+}
+
+function dataKey(){
+
+  return guest?GUEST_DATA_KEY:DATA_PREFIX+currentUser;
+
+}
+
+function save(){
+
+  if(data)write(dataKey(),data);
+
+  if(!guest&&currentUser){
+
+    write(SESSION_KEY,{username:currentUser});
+
+  }
+
+  updateTop();
+
+}
+
+function loadData(){
+
+  data=mergeData(read(dataKey(),defaults()));
+
+  if(data.dailyDate!==today()){
+
+    data.dailyDate=today();
+
+    data.dailyCorrect=0;
+
+    data.dailyClaimed=false;
+
+  }
+
+  save();
+
+}
+
+async function hashPassword(text){
+
+  if(window.crypto&&crypto.subtle){
+
+    const bytes=new TextEncoder().encode(text);
+
+    const hash=await crypto.subtle.digest('SHA-256',bytes);
+
+    return [...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,'0')).join('');
+
+  }
+
+  return btoa(unescape(encodeURIComponent(text)));
+
+}
+
+async function register(){
+
+  const username=$('username').value.trim().normalize('NFC');
+
+  const password=$('password').value;
+
+  if(username.length<3||password.length<4){
+
+    return modal('Thông tin chưa hợp lệ','Tên tài khoản cần ít nhất 3 ký tự và mật khẩu ít nhất 4 ký tự.');
+
+  }
+
+  if(accounts.some(a=>a.username.toLowerCase()===username.toLowerCase())){
+
+    return modal('Tài khoản đã tồn tại','Hãy chọn tên tài khoản khác.');
+
+  }
+
+  accounts.push({username,password:await hashPassword(password)});
+
+  write(ACCOUNT_KEY,accounts);
+
+  currentUser=username;guest=false;loadData();enterHome();
+
+  notify('Tạo tài khoản thành công!');
+
+}
+
+async function login(){
+
+  const username=$('username').value.trim().normalize('NFC');
+
+  const password=$('password').value;
+
+  const account=accounts.find(a=>a.username.toLowerCase()===username.toLowerCase());
+
+  if(!account)return modal('Không tìm thấy tài khoản','Hãy kiểm tra tên tài khoản.');
+
+  if(account.password!==await hashPassword(password)){
+
+    return modal('Sai mật khẩu','Mật khẩu chưa chính xác.');
+
+  }
+
+  currentUser=account.username;guest=false;loadData();enterHome();
+
+}
+
+function guestLogin(){
+
+  currentUser='Khách';guest=true;loadData();enterHome();
+
+}
+
+function enterHome(){
+
+  showScreen('home');renderHome();
+
+}
+
+function logout(){
+
+  currentUser=null;data=null;guest=false;
+
+  localStorage.removeItem(SESSION_KEY);
+
+  showScreen('auth');
+
+}
+
+function resetData(){
+
+  if(!confirm('Bạn có chắc muốn xóa toàn bộ tiến trình của tài khoản hiện tại?'))return;
+
+  data=defaults();save();renderHome();notify('Đã đặt lại tiến trình.');
+
+}
+
+/* =========================
+
+   HỆ THỐNG CẤP ĐỘ V8
+
+========================= */
+
+function xpRequired(level){
+
+  return 100+(level-1)*10;
+
+}
+
+function xpForLevel(level){
+
+  const n=level-1;
+
+  return 100*n+10*n*(n-1)/2;
+
+}
+
+function getLevelInfo(totalXP){
+
+  const xp=safeNumber(totalXP);
+
+  let level=1;
+
+  while(level<100&&xp>=xpForLevel(level+1))level++;
+
+  if(level>=100){
+
+    return {level:100,into:0,need:0,percent:100,max:true};
+
+  }
+
+  const start=xpForLevel(level);
+
+  const need=xpRequired(level);
+
+  const into=xp-start;
+
+  return {
+
+    level,into,need,
+
+    percent:Math.min(100,into/need*100),
+
+    max:false
+
+  };
+
+}
+
+const titleOptions=[
+
+  {title:'Tân Binh',level:1,icon:'🛡️'},
+
+  {title:'Chiến Binh Tinh Nhuệ',level:10,icon:'⚔️'},
+
+  {title:'Kiếm Sĩ Huyền Thoại',level:20,icon:'🗡️'},
+
+  {title:'Đại Kiếm Sư',level:30,icon:'🔱'},
+
+  {title:'Bá Chủ Chiến Trường',level:40,icon:'👑'},
+
+  {title:'Thánh Chiến Thần',level:50,icon:'🌟'},
+
+  {title:'Huyền Thoại Bất Diệt',level:60,icon:'🔥'},
+
+  {title:'Đế Vương Vĩnh Hằng',level:70,icon:'💎'},
+
+  {title:'Chúa Tể Thiên Không',level:80,icon:'🌌'},
+
+  {title:'Thần Vương Tối Thượng',level:90,icon:'☀️'},
+
+  {title:'ĐẤNG SÁNG THẾ',level:100,icon:'✨'}
+
+];
+
+function unlockTitles(){
+
+  const level=getLevelInfo(data.xp).level;
+
+  titleOptions.forEach(t=>{
+
+    if(level>=t.level&&!data.ownedTitles.includes(t.title)){
+
+      data.ownedTitles.push(t.title);
+
+      notify('👑 Mở khóa danh hiệu: '+t.title);
+
+    }
+
+  });
+
+}
+
+function awardXP(amount){
+
+  const before=getLevelInfo(data.xp).level;
+
+  data.xp+=amount;
+
+  unlockTitles();
+
+  const after=getLevelInfo(data.xp).level;
+
+  if(after>before){
+
+    showEffect('LEVEL UP! CẤP '+after,'boomText');
+
+    notify('✨ Chúc mừng! Bạn đạt cấp '+after);
+
+  }
+
+  save();
+
+}
+
+function updateTop(){
+
+  if(!data)return;
+
+  const info=getLevelInfo(data.xp);
+
+  $('topLevel').textContent='CẤP '+info.level;
+
+  $('topCoins').textContent='🪙 '+data.coins;
+
+}
+
+/* =========================
+
+   MÀN HÌNH VÀ GIAO DIỆN
+
+========================= */
+
+function showScreen(name){
+
+  clearTimer();
+
+  ['authScreen','homeScreen','gameScreen','overScreen','rpgScreen'].forEach(id=>{
+
+    $(id).classList.add('hidden');
+
+  });
+
+  const map={
+
+    auth:'authScreen',home:'homeScreen',game:'gameScreen',
+
+    over:'overScreen',rpg:'rpgScreen'
+
+  };
+
+  $(map[name]).classList.remove('hidden');
+
+  window.scrollTo(0,0);
+
+}
+
+function renderHome(){
+
+  if(!data)return;
+
+  unlockTitles();
+
+  const info=getLevelInfo(data.xp);
+
+  $('homeAvatar').textContent=data.avatar;
+
+  $('homeName').textContent=currentUser||'Nhà thám hiểm';
+
+  $('homeTitle').textContent=data.title;
+
+  $('homeLevel').textContent='Cấp '+info.level+(info.max?' · MAX LEVEL':'');
+
+  $('homeXPBar').style.width=info.percent+'%';
+
+  $('homeXPText').textContent=info.max?'MAX LEVEL · 100':info.into+' / '+info.need+' XP';
+
+  $('homeCoins').textContent=data.coins;
+
+  $('homeGames').textContent=data.games;
+
+  $('homeRight').textContent=data.right;
+
+  $('homeStreak').textContent=data.bestStreak;
+
+  $('homeBoss').textContent=data.bossesDefeated;
+
+  $('homeChest').textContent=data.chestsOpened;
+
+  renderDaily();
+
+  updateTop();
+
+}
+
+function renderDaily(){
+
+  const count=Math.min(20,data.dailyCorrect);
+
+  $('dailyText').textContent='Đã trả lời đúng '+count+'/20 câu · Phần thưởng: 100 xu và 50 XP';
+
+  $('dailyBar').style.width=(count/20*100)+'%';
+
+  $('dailyClaim').disabled=count<20||data.dailyClaimed;
+
+  $('dailyClaim').textContent=data.dailyClaimed?'Đã nhận thưởng hôm nay':'Nhận thưởng ngày';
+
+}
+
+function claimDaily(){
+
+  if(data.dailyCorrect<20||data.dailyClaimed)return;
+
+  data.dailyClaimed=true;
+
+  data.coins+=100;
+
+  awardXP(50);
+
+  data.dailyStreak++;
+
+  data.dailyLastCompleted=today();
+
+  save();renderHome();notify('🎁 Nhận 100 xu và 50 XP!');
+
+}
+
+function modal(title,text){
+
+  $('modalTitle').textContent=title;
+
+  $('modalText').textContent=text;
+
+  $('modal').classList.remove('hidden');
+
+}
+
+function closeModal(){$('modal').classList.add('hidden')}
+
+function notify(text){
+
+  $('toast').textContent=text;
+
+  $('toast').classList.remove('hidden');
+
+  clearTimeout(toastTimer);
+
+  toastTimer=setTimeout(()=>$('toast').classList.add('hidden'),2400);
+
+}
+
+function showEffect(text,className){
+
+  const box=$('feedback');
+
+  box.textContent=text;
+
+  box.className='feedback '+className+' pop';
+
+}
+
+function escapeHTML(text){
+
+  return String(text).replace(/[&<>"']/g,c=>({
+
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+
+  })[c]);
+
+}
+
+/* =========================
+
+   HỆ THỐNG TRẬN ĐẤU
+
+========================= */
+
+const modes={
+
+  easy:{label:'DỄ',time:4,points:1,range:20},
+
+  medium:{label:'VỪA',time:3,points:2,range:50},
+
+  hard:{label:'KHÓ',time:2,points:5,range:100},
+
+  survival:{label:'SINH TỒN',time:4,points:2,range:30}
+
+};
+
+const bossList=[
+
+  {name:'Slime Toán',icon:'🟢',need:10,reward:50,hp:10},
+
+  {name:'Goblin',icon:'👺',need:30,reward:150,hp:30},
+
+  {name:'Dark Knight',icon:'⚔️',need:50,reward:500,hp:50},
+
+  {name:'Dragon',icon:'🐉',need:100,reward:1000,hp:100},
+
+  {name:'Demon King',icon:'😈',need:200,reward:5000,hp:200}
+
+];
+
+function startGame(mode){
+
+  lastMode=mode;
+
+  game={
+
+    mode,score:0,right:0,wrong:0,streak:0,
+
+    bestStreak:0,questionNo:0,correctAnswer:0,
+
+    timeLeft:modes[mode].time,locked:false,
+
+    bossIndex:0,bossHP:0,bossMax:0,
+
+    bossDefeatedThisGame:0
+
+  };
+
+  showScreen('game');
+
+  $('gameMode').textContent=modes[mode].label;
+
+  $('feedback').textContent='';
+
+  $('gameScore').textContent='0';
+
+  $('gameRight').textContent='0';
+
+  $('gameStreak').textContent='0';
+
+  nextQuestion();
+
+}
+
+function randomInt(min,max){
+
+  return Math.floor(Math.random()*(max-min+1))+min;
+
+}
+
+function makeQuestion(){
+
+  let range=modes[game.mode].range;
+
+  if(game.mode==='survival'){
+
+    range+=Math.floor(game.questionNo/10)*10;
+
+  }
+
+  const difficulty=game.mode==='hard'?1:game.mode==='medium'?0.5:0;
+
+  let a,b,op,answer;
+
+  const operations=['+','-','×','÷'];
+
+  op=operations[randomInt(0,3)];
+
+  if(op==='+'){
+
+    a=randomInt(1,range);b=randomInt(1,range);answer=a+b;
+
+  }else if(op==='-'){
+
+    a=randomInt(1,range);b=randomInt(1,range);
+
+    if(b>a)[a,b]=[b,a];
+
+    answer=a-b;
+
+  }else if(op==='×'){
+
+    const limit=Math.max(5,Math.floor(range/5));
+
+    a=randomInt(2,limit);b=randomInt(2,10);answer=a*b;
+
+  }else{
+
+    b=randomInt(2,10);answer=randomInt(2,Math.max(3,Math.floor(range/3)));
+
+    a=b*answer;
+
+  }
+
+  if(difficulty&&game.questionNo%5===0){
+
+    a+=randomInt(1,10);
+
+  }
+
+  return {text:a+' '+op+' '+b+' = ?',answer};
+
+}
+
+function nextQuestion(){
+
+  if(!game)return;
+
+  game.locked=false;
+
+  game.questionNo++;
+
+  game.timeLeft=modes[game.mode].time;
+
+  const q=makeQuestion();
+
+  game.correctAnswer=q.answer;
+
+  $('question').textContent=q.text;
+
+  $('questionLevel').textContent='Câu '+game.questionNo;
+
+  $('feedback').textContent='';
+
+  buildAnswers(q.answer);
+
+  updateBoss();
+
+  startTimer();
+
+}
+
+function buildAnswers(correct){
+
+  const answers=new Set([correct]);
+
+  while(answers.size<4){
+
+    let offset=randomInt(-10,10);
+
+    if(offset===0)offset=1;
+
+    answers.add(Math.max(0,correct+offset));
+
+  }
+
+  const shuffled=[...answers].sort(()=>Math.random()-.5);
+
+  $('answerGrid').innerHTML='';
+
+  shuffled.forEach(value=>{
+
+    const btn=document.createElement('button');
+
+    btn.className='answer';
+
+    btn.textContent=value;
+
+    btn.onclick=()=>answer(value);
+
+    $('answerGrid').appendChild(btn);
+
+  });
+
+}
+
+function clearTimer(){
+
+  timerToken++;
+
+  if(timerId)clearInterval(timerId);
+
+  timerId=null;
+
+}
+
+function startTimer(){
+
+  clearTimer();
+
+  const token=timerToken;
+
+  let remaining=modes[game.mode].time*10;
+
+  $('timer').textContent=(remaining/10).toFixed(1);
+
+  timerId=setInterval(()=>{
+
+    if(!game||token!==timerToken){clearInterval(timerId);return}
+
+    remaining--;
+
+    game.timeLeft=remaining/10;
+
+    $('timer').textContent=(remaining/10).toFixed(1);
+
+    if(remaining<=0){
+
+      clearTimer();
+
+      answer(null);
+
+    }
+
+  },100);
+
+}
+
+function answer(value){
+
+  if(!game||game.locked)return;
+
+  game.locked=true;
+
+  clearTimer();
+
+  const correct=value===game.correctAnswer;
+
+  [...$('answerGrid').children].forEach(btn=>{
+
+    btn.disabled=true;
+
+    if(Number(btn.textContent)===game.correctAnswer){
+
+      btn.style.borderColor='#3ee69b';
+
+      btn.style.background='#14543d';
+
+    }else if(Number(btn.textContent)===value){
+
+      btn.style.borderColor='#ff5470';
+
+      btn.style.background='#572033';
+
+    }
+
+  });
+
+  if(correct){
+
+    game.right++;
+
+    game.streak++;
+
+    game.bestStreak=Math.max(game.bestStreak,game.streak);
+
+    let points=modes[game.mode].points;
+
+    if(game.mode==='survival'){
+
+      points+=Math.floor(game.right/10);
+
+    }
+
+    game.score+=points;
+
+    showEffect('✓ ĐÚNG! +'+points,'correctText');
+
+    data.dailyCorrect++;
+
+    data.right++;
+
+    data.coins+=5;
+
+    awardXP(10);
+
+    damageBoss();
+
+    checkAchievements();
+
+  }else{
+
+    game.wrong++;
+
+    game.streak=0;
+
+    showEffect(value===null?'⌛ HẾT GIỜ!':'✕ SAI!','wrongText');
+
+    data.wrong++;
+
+    if(game.mode==='survival'){
+
+      setTimeout(()=>endGame('Bạn đã hết cơ hội sinh tồn.'),650);
+
+      save();
+
+      return;
+
+    }
+
+  }
+
+  $('gameScore').textContent=game.score;
+
+  $('gameRight').textContent=game.right;
+
+  $('gameStreak').textContent=game.streak;
+
+  data.bestStreak=Math.max(data.bestStreak,game.bestStreak);
+
+  save();
+
+  if(game.mode==='survival'&&game.wrong>=3){
+
+    setTimeout(()=>endGame('Bạn đã mắc 3 lỗi.'),650);
+
+    return;
+
+  }
+
+  setTimeout(()=>{
+
+    if(game&&!game.locked===false)return;
+
+    nextQuestion();
+
+  },650);
+
+}
+
+function updateBoss(){
+
+  const boss=bossList[game.bossIndex%bossList.length];
+
+  if(!boss)return;
+
+  $('bossPanel').classList.remove('hidden');
+
+  if(game.bossMax===0){
+
+    game.bossMax=boss.hp;
+
+    game.bossHP=boss.hp;
+
+  }
+
+  $('bossIcon').textContent=boss.icon;
+
+  $('bossName').textContent=boss.name;
+
+  $('bossHPText').textContent=game.bossHP+' / '+game.bossMax+' HP';
+
+  $('bossHPBar').style.width=(game.bossHP/game.bossMax*100)+'%';
+
+}
+
+function damageBoss(){
+
+  if(!game)return;
+
+  game.bossHP=Math.max(0,game.bossHP-1);
+
+  $('bossHPText').textContent=game.bossHP+' / '+game.bossMax+' HP';
+
+  $('bossHPBar').style.width=(game.bossHP/game.bossMax*100)+'%';
+
+  if(game.bossHP<=0){
+
+    const boss=bossList[game.bossIndex%bossList.length];
+
+    data.coins+=boss.reward;
+
+    data.bossesDefeated++;
+
+    game.bossDefeatedThisGame++;
+
+    showEffect('💥 BÙM! '+boss.name+' BỊ ĐÁNH BẠI!','boomText');
+
+    document.body.classList.add('shake');
+
+    setTimeout(()=>document.body.classList.remove('shake'),450);
+
+    notify('🐉 Hạ boss! Nhận '+boss.reward+' xu.');
+
+    game.bossIndex++;
+
+    const next=bossList[game.bossIndex%bossList.length];
+
+    game.bossMax=next.hp;
+
+    game.bossHP=next.hp;
+
+    save();
+
+  }
+
+}
+
+function endGame(message){
+
+  if(!game)return;
+
+  clearTimer();
+
+  const finished=game;
+
+  data.games++;
+
+  data.totalScore+=finished.score;
+
+  data.records[finished.mode]=Math.max(data.records[finished.mode]||0,finished.score);
+
+  if(finished.mode==='hard'){
+
+    data.adminBestHardScore=Math.max(data.adminBestHardScore,finished.score);
+
+  }
+
+  save();
+
+  $('overTitle').textContent=finished.mode==='survival'?'💀 KẾT THÚC SINH TỒN':'🏁 KẾT THÚC TRẬN ĐẤU';
+
+  $('overMessage').textContent=message;
+
+  $('overScore').textContent=finished.score;
+
+  $('overRight').textContent=finished.right;
+
+  $('overWrong').textContent=finished.wrong;
+
+  $('overReward').textContent='Phần thưởng: '+finished.right*5+' xu · '+finished.right*10+' XP đã nhận trong trận';
+
+  game=null;
+
+  showScreen('over');
+
+}
+
+/* =========================
+
+   THÀNH TÍCH
+
+========================= */
+
+const achievements=[
+
+  {id:'FIRST',name:'Bước chân đầu tiên',desc:'Trả lời đúng câu đầu tiên',icon:'🌱',test:()=>data.right>=1},
+
+  {id:'RIGHT50',name:'Người học chăm chỉ',desc:'Đạt 50 câu đúng',icon:'📘',test:()=>data.right>=50},
+
+  {id:'RIGHT200',name:'Bậc thầy tính toán',desc:'Đạt 200 câu đúng',icon:'🧠',test:()=>data.right>=200},
+
+  {id:'RIGHT500',name:'Thiên tài toán học',desc:'Đạt 500 câu đúng',icon:'🌟',test:()=>data.right>=500},
+
+  {id:'RIGHT1000',name:'Huyền thoại toán học',desc:'Đạt 1000 câu đúng',icon:'👑',test:()=>data.right>=1000},
+
+  {id:'GAMES10',name:'Chiến binh mới',desc:'Hoàn thành 10 trận',icon:'⚔️',test:()=>data.games>=10},
+
+  {id:'GAMES50',name:'Chiến binh kỳ cựu',desc:'Hoàn thành 50 trận',icon:'🛡️',test:()=>data.games>=50},
+
+  {id:'GAMES100',name:'Bất khả chiến bại',desc:'Hoàn thành 100 trận',icon:'🔥',test:()=>data.games>=100},
+
+  {id:'BOSS10',name:'Thợ săn boss',desc:'Hạ 10 boss',icon:'🐉',test:()=>data.bossesDefeated>=10},
+
+  {id:'CHEST10',name:'Nhà sưu tập',desc:'Mở 10 rương',icon:'🎁',test:()=>data.chestsOpened>=10},
+
+  {id:'STREAK20',name:'Tập trung tuyệt đối',desc:'Đạt chuỗi 20 câu đúng',icon:'🎯',test:()=>data.bestStreak>=20},
+
+  {id:'LEVEL10',name:'Vươn lên',desc:'Đạt cấp 10',icon:'✨',test:()=>getLevelInfo(data.xp).level>=10},
+
+  {id:'LEVEL50',name:'Đỉnh cao',desc:'Đạt cấp 50',icon:'💎',test:()=>getLevelInfo(data.xp).level>=50},
+
+  {id:'LEVEL100',name:'Đấng sáng thế',desc:'Đạt cấp 100',icon:'🌌',test:()=>getLevelInfo(data.xp).level>=100}
+
+];
+
+function checkAchievements(){
+
+  achievements.forEach(a=>{
+
+    if(!data.achievements.includes(a.id)&&a.test()){
+
+      data.achievements.push(a.id);
+
+      data.coins+=50;
+
+      notify('🏆 Thành tích mới: '+a.name+' · +50 xu');
+
+    }
+
+  });
+
+  save();
+
+}
+
+/* =========================
+
+   CỬA HÀNG VÀ VẬT PHẨM
+
+========================= */
+
+const avatars=[
+
+  {icon:'🧙',name:'Pháp sư',price:0},
+
+  {icon:'🧝',name:'Tiên tộc',price:100},
+
+  {icon:'🧛',name:'Ma cà rồng',price:150},
+
+  {icon:'🥷',name:'Ninja',price:200},
+
+  {icon:'🦸',name:'Siêu anh hùng',price:300},
+
+  {icon:'🐉',name:'Rồng cổ đại',price:500},
+
+  {icon:'👑',name:'Vương giả',price:800},
+
+  {icon:'🦊',name:'Hồ ly',price:250},
+
+  {icon:'🦁',name:'Sư tử',price:350}
+
+];
+
+const themes=[
+
+  {id:'neon',name:'Neon',price:0},
+
+  {id:'ocean',name:'Đại dương',price:150},
+
+  {id:'sunset',name:'Hoàng hôn',price:200},
+
+  {id:'purple',name:'Huyền bí',price:300}
+
+];
+
+function buyAvatar(icon,price){
+
+  if(data.ownedAvatars.includes(icon)){
+
+    data.avatar=icon;save();renderRPG();return notify('Đã trang bị avatar.');
+
+  }
+
+  if(data.coins<price)return notify('Không đủ xu!');
+
+  data.coins-=price;data.ownedAvatars.push(icon);data.avatar=icon;
+
+  save();renderRPG();notify('Mua avatar thành công!');
+
+}
+
+function buyTheme(id,price){
+
+  if(data.ownedThemes.includes(id)){
+
+    data.theme=id;save();applyTheme();renderRPG();return notify('Đã đổi giao diện.');
+
+  }
+
+  if(data.coins<price)return notify('Không đủ xu!');
+
+  data.coins-=price;data.ownedThemes.push(id);data.theme=id;
+
+  save();applyTheme();renderRPG();notify('Mua giao diện thành công!');
+
+}
+
+function applyTheme(){
+
+  const colors={
+
+    neon:'#50b8ff',ocean:'#35d7d0',sunset:'#ff9b55',purple:'#b68cff'
+
+  };
+
+  document.documentElement.style.setProperty('--accent',colors[data.theme]||colors.neon);
+
+}
+
+function openChest(){
+
+  const cost=100;
+
+  if(data.coins<cost)return notify('Bạn cần 100 xu để mở rương!');
+
+  data.coins-=cost;
+
+  data.chestsOpened++;
+
+  const roll=Math.random();
+
+  let reward;
+
+  if(roll<.45){
+
+    const coins=randomInt(50,150);data.coins+=coins;
+
+    reward='🪙 Nhận '+coins+' xu!';
+
+  }else if(roll<.8){
+
+    const xp=randomInt(30,100);awardXP(xp);
+
+    reward='✨ Nhận '+xp+' XP!';
+
+  }else if(roll<.95){
+
+    const bonus=randomInt(150,300);data.coins+=bonus;
+
+    reward='💎 Kho báu! Nhận '+bonus+' xu!';
+
+  }else{
+
+    const avatar=avatars.find(a=>!data.ownedAvatars.includes(a.icon));
+
+    if(avatar){
+
+      data.ownedAvatars.push(avatar.icon);
+
+      reward='🌟 Mở khóa avatar '+avatar.icon+' '+avatar.name+'!';
+
+    }else{
+
+      data.coins+=500;reward='🎉 Nhận 500 xu vì đã sở hữu toàn bộ avatar!';
+
+    }
+
+  }
+
+  checkAchievements();save();renderRPG();modal('🎁 RƯƠNG BÁU',reward);
+
+}
+
+/* =========================
+
+   BOSS
+
+========================= */
+
+function fightBoss(index){
+
+  const boss=bossList[index];
+
+  const info=getLevelInfo(data.xp);
+
+  if(info.level<Math.max(1,index*5+1)){
+
+    return notify('Bạn cần cấp cao hơn để mở boss này.');
+
+  }
+
+  modal('🐉 '+boss.name,
+
+    'Boss có '+boss.hp+' HP. Hãy vào chế độ chiến đấu và trả lời đúng để gây sát thương. Mỗi boss bị hạ sẽ được thưởng '+boss.reward+' xu.');
+
+}
+
+/* =========================
+
+   HIỂN THỊ TRUNG TÂM RPG
+
+========================= */
+
+function openRPG(tab){
+
+  currentTab=tab;
+
+  showScreen('rpg');
+
+  document.querySelectorAll('.tab').forEach(t=>{
+
+    t.classList.toggle('active',t.dataset.tab===tab);
+
+  });
+
+  renderRPG();
+
+}
+
+function renderRPG(){
+
+  if(!data)return;
+
+  const box=$('rpgContent');
+
+  const info=getLevelInfo(data.xp);
+
+  let html='';
+
+  if(currentTab==='profile'){
+
+    html=`
+
+      <div class="hero">
+
+        <div class="avatar">${data.avatar}</div>
+
+        <h2>${escapeHTML(currentUser||'Khách')}</h2>
+
+        <span class="badge gold">${escapeHTML(data.title)}</span>
+
+        <h2>Cấp ${info.level}${info.max?' · MAX':''}</h2>
+
+        <div class="progress"><div style="width:${info.percent}%"></div></div>
+
+        <p class="small muted">${info.max?'Đã đạt cấp độ tối đa':info.into+' / '+info.need+' XP'}</p>
+
+      </div>
+
+      <div class="grid3">
+
+        <div class="stat"><b>${data.coins}</b><span>Xu</span></div>
+
+        <div class="stat"><b>${data.xp.toLocaleString('vi-VN')}</b><span>Tổng XP</span></div>
+
+        <div class="stat"><b>${data.games}</b><span>Trận</span></div>
+
+      </div>
+
+      <h3>Chọn avatar</h3>
+
+      <div class="grid3">
+
+      ${avatars.map(a=>`<button class="mode" onclick="buyAvatar('${a.icon}',${a.price})">
+
+        <div class="avatar">${a.icon}</div><b>${a.name}</b>
+
+        <span class="small muted">${data.ownedAvatars.includes(a.icon)?'Đã sở hữu':a.price+' xu'}</span>
+
+      </button>`).join('')}
+
+      </div>`;
+
+  }
+
+  else if(currentTab==='shop'){
+
+    html='<h2>🛒 Cửa hàng giao diện</h2>'+themes.map(t=>`
+
+      <div class="item list">
+
+        <div><h3>${t.name}</h3><span class="muted small">${data.ownedThemes.includes(t.id)?'Đã sở hữu':t.price+' xu'}</span></div>
+
+        <button class="btn" onclick="buyTheme('${t.id}',${t.price})">${data.theme===t.id?'Đang dùng':data.ownedThemes.includes(t.id)?'Trang bị':'Mua'}</button>
+
+      </div>`).join('')+
+
+      '<h2>🧙 Avatar</h2>'+avatars.map(a=>`
+
+      <div class="item list"><div>${a.icon} ${a.name} · ${data.ownedAvatars.includes(a.icon)?'Đã sở hữu':a.price+' xu'}</div>
+
+      <button class="btn" onclick="buyAvatar('${a.icon}',${a.price})">${data.avatar===a.icon?'Đang dùng':data.ownedAvatars.includes(a.icon)?'Trang bị':'Mua'}</button></div>`).join('');
+
+  }
+
+  else if(currentTab==='chest'){
+
+    html=`<div class="hero"><div class="avatar">🎁</div><h2>RƯƠNG BÁU HUYỀN BÍ</h2>
+
+      <p class="muted">Có cơ hội nhận xu, XP và avatar hiếm.</p>
+
+      <h2>100 🪙 / lượt mở</h2>
+
+      <button class="btn gold" onclick="openChest()">MỞ RƯƠNG</button>
+
+      <p>Đã mở: ${data.chestsOpened} rương</p></div>`;
+
+  }
+
+  else if(currentTab==='boss'){
+
+    html='<h2>🐉 Danh sách Boss</h2>'+bossList.map((b,i)=>`
+
+      <div class="boss">
+
+        <div class="list"><div><span class="boss-icon">${b.icon}</span> <b>${b.name}</b></div><span class="badge gold">${b.reward} xu</span></div>
+
+        <p class="muted small">HP: ${b.hp} · Cấp yêu cầu: ${Math.max(1,i*5+1)}</p>
+
+        <button class="btn red" onclick="fightBoss(${i})">Thông tin boss</button>
+
+      </div>`).join('');
+
+  }
+
+  else if(currentTab==='achievements'){
+
+    html='<h2>🏆 Bộ sưu tập thành tích</h2>'+achievements.map(a=>{
+
+      const unlocked=data.achievements.includes(a.id);
+
+      return `<div class="item list"><div><b>${a.icon} ${a.name}</b><p class="small muted">${a.desc}</p></div>
+
+      <span class="badge ${unlocked?'green':'lock'}">${unlocked?'Đã mở':'Chưa đạt'}</span></div>`;
+
+    }).join('');
+
+  }
+
+  else if(currentTab==='titles'){
+
+    html='<h2>👑 Danh hiệu huyền thoại</h2>'+titleOptions.map(t=>{
+
+      const unlocked=data.ownedTitles.includes(t.title);
+
+      return `<div class="item list"><div><b>${t.icon} ${t.title}</b><p class="small muted">Yêu cầu cấp ${t.level}</p></div>
+
+      <button class="btn ${data.title===t.title?'gold':''}" ${!unlocked?'disabled':''} onclick="equipTitle('${t.title}')">${data.title===t.title?'Đang dùng':unlocked?'Trang bị':'🔒'}</button></div>`;
+
+    }).join('');
+
+  }
+
+  else if(currentTab==='stats'){
+
+    const accuracy=data.right+data.wrong?Math.round(data.right/(data.right+data.wrong)*100):0;
+
+    html=`<h2>📈 Thống kê chiến binh</h2>
+
+      <div class="grid3">
+
+        <div class="stat"><b>${data.games}</b><span>Trận đấu</span></div>
+
+        <div class="stat"><b>${data.right}</b><span>Câu đúng</span></div>
+
+        <div class="stat"><b>${data.wrong}</b><span>Câu sai</span></div>
+
+        <div class="stat"><b>${accuracy}%</b><span>Độ chính xác</span></div>
+
+        <div class="stat"><b>${data.bestStreak}</b><span>Chuỗi tốt nhất</span></div>
+
+        <div class="stat"><b>${data.bossesDefeated}</b><span>Boss đã hạ</span></div>
+
+      </div>
+
+      <h3>Kỷ lục theo chế độ</h3>
+
+      ${Object.entries(modes).map(([k,m])=>`<div class="item list"><b>${m.label}</b><b>${data.records[k]||0} điểm</b></div>`).join('')}`;
+
+  }
+
+  else if(currentTab==='leaderboard'){
+
+    const rows=accounts.map(a=>{
+
+      const d=mergeData(read(DATA_PREFIX+a.username,defaults()));
+
+      return {name:a.username,level:getLevelInfo(d.xp).level,xp:d.xp,score:d.totalScore};
+
+    });
+
+    if(!guest)rows.push({name:currentUser,level:info.level,xp:data.xp,score:data.totalScore});
+
+    rows.sort((a,b)=>b.level-a.level||b.xp-a.xp||b.score-a.score);
+
+    html='<h2>📊 Bảng xếp hạng trên thiết bị này</h2>'+
+
+      '<p class="muted small">Xếp hạng tài khoản đã lưu trên thiết bị hiện tại.</p>'+
+
+      rows.map((r,i)=>`<div class="item list"><div><b>${i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1)} ${escapeHTML(r.name)}</b><p class="small muted">Cấp ${r.level} · ${r.xp.toLocaleString('vi-VN')} XP</p></div><b>${r.score} điểm</b></div>`).join('');
+
+  }
+
+  else if(currentTab==='admin'){
+
+    html=`<h2>🛡️ Khu vực Admin</h2>
+
+      <p class="muted">Các thao tác quản trị dữ liệu tài khoản hiện tại.</p>
+
+      <button class="btn purple block" onclick="adminLogin()">Mở khóa Admin</button>
+
+      <div id="adminTools" class="${data.adminUnlocked?'':'hidden'}">
+
+        <div class="item"><b>Thêm xu</b><input id="adminCoins" type="number" placeholder="Số xu"><button class="btn" onclick="adminAdd('coins')">Xác nhận</button></div>
+
+        <div class="item"><b>Thêm XP</b><input id="adminXP" type="number" placeholder="Số XP"><button class="btn" onclick="adminAdd('xp')">Xác nhận</button></div>
+
+        <button class="btn gold block" onclick="adminMax()">Mở khóa cấp 100 và tối đa chỉ số</button>
+
+        <button class="btn red block" onclick="adminReset()">Xóa trạng thái Admin</button>
+
+      </div>`;
+
+  }
+
+  box.innerHTML=html;
+
+  updateTop();
+
+}
+
+function equipTitle(title){
+
+  if(!data.ownedTitles.includes(title))return;
+
+  data.title=title;save();renderHome();renderRPG();notify('Đã trang bị danh hiệu!');
+
+}
+
+function adminLogin(){
+
+  const pass=prompt('Nhập mật khẩu Admin:');
+
+  if(pass===null)return;
+
+  if(pass!==ADMIN_PASSWORD)return notify('Sai mật khẩu Admin!');
+
+  data.adminUnlocked=true;save();notify('Admin đã mở khóa!');
+
+  if(currentTab==='admin')renderRPG();
+
+}
+
+function adminAdd(type){
+
+  if(!data.adminUnlocked)return;
+
+  const id=type==='coins'?'adminCoins':'adminXP';
+
+  const amount=safeNumber($(id).value);
+
+  if(!amount)return notify('Nhập số lượng hợp lệ.');
+
+  if(type==='coins')data.coins+=amount;
+
+  else awardXP(amount);
+
+  save();renderRPG();renderHome();notify('Đã cập nhật dữ liệu.');
+
+}
+
+function adminMax(){
+
+  if(!data.adminUnlocked)return;
+
+  data.xp=xpForLevel(100);
+
+  data.coins=1000000;
+
+  data.right=100000;
+
+  data.games=1000;
+
+  data.bestStreak=1000;
+
+  data.bossesDefeated=100;
+
+  data.ownedTitles=titleOptions.map(t=>t.title);
+
+  data.achievements=achievements.map(a=>a.id);
+
+  unlockTitles();save();renderRPG();renderHome();
+
+  notify('Đã mở khóa tiến trình tối đa!');
+
+}
+
+function adminReset(){
+
+  if(!data.adminUnlocked)return;
+
+  data.adminUnlocked=false;save();renderRPG();
+
+}
+
+/* =========================
+
+   KHỞI ĐỘNG
+
+========================= */
+
+function boot(){
+
+  const session=read(SESSION_KEY,null);
+
+  if(session&&session.username&&accounts.some(a=>a.username===session.username)){
+
+    currentUser=session.username;guest=false;loadData();enterHome();
+
+  }else{
+
+    showScreen('auth');
+
+  }
+
+}
+
+boot();
+
+</script>
+
+</body>
+
+</html>
